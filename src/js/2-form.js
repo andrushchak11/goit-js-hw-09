@@ -4,13 +4,13 @@ const form = document.querySelector('.feedback-form');
 
 const fillFormFields = () => {
   try {
-    if (localStorage.length === 0) {
-      return;
-    }
-
     const formDataFromLS = JSON.parse(
       localStorage.getItem('feedback-form-data')
     );
+
+    if (formDataFromLS === null) {
+      return;
+    }
 
     formData = formDataFromLS;
 
@@ -38,11 +38,18 @@ const onFormFieldChanhe = event => {
 const onFeedbackFormSubmit = event => {
   event.preventDefault();
 
+  const { email, message } = formData;
+
+  if (!email || !message) {
+    alert('Fill please all fields');
+    return;
+  }
+
   const { currentTarget: formEL } = event;
 
   event.currentTarget.reset();
   localStorage.removeItem('feedback-form-data');
 };
 
-form.addEventListener('change', onFormFieldChanhe);
+form.addEventListener('input', onFormFieldChanhe);
 form.addEventListener('submit', onFeedbackFormSubmit);
